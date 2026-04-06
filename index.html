@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>InspectPro — Professional Vehicle Inspection Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a0b0d;--surface:#111214;--surface2:#1c1d20;--border:#2a2b2f;
+  --accent:#f0c040;--text:#f2f2f2;--muted:#6b6e77;
+  --ok:#3ddc84;--danger:#ff4d4d;--warn:#ff9f2e;
+  --font-d:'Bebas Neue',sans-serif;--font-b:'DM Sans',sans-serif;--font-m:'DM Mono',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--font-b);overflow-x:hidden}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between;background:rgba(10,11,13,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+.nav-logo{display:flex;align-items:center;gap:.6rem;text-decoration:none}
+.nav-logo-text{font-family:var(--font-d);font-size:1.4rem;letter-spacing:2px;color:var(--text)}
+.nav-logo-text span{color:var(--accent)}
+.nav-sub{font-size:.5rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase}
+.nav-links{display:flex;align-items:center;gap:1.75rem}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:.88rem;font-weight:500;transition:color .2s}
+.nav-links a:hover{color:var(--text)}
+.nav-cta{background:var(--accent)!important;color:#111!important;padding:.45rem 1.25rem;border-radius:6px;font-family:var(--font-d);font-size:.95rem;letter-spacing:1.5px;text-decoration:none;white-space:nowrap}
+@media(max-width:768px){.nav-links a:not(.nav-cta){display:none}}
+
+#hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:8rem 2rem 5rem;position:relative;overflow:hidden}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:60px 60px;opacity:.25;pointer-events:none}
+.hero-glow{position:absolute;top:10%;left:50%;transform:translateX(-50%);width:700px;height:500px;background:radial-gradient(ellipse,rgba(240,192,64,.1) 0%,transparent 70%);pointer-events:none}
+.hero-badge{display:inline-flex;align-items:center;gap:.5rem;background:var(--surface2);border:1px solid var(--accent);border-radius:99px;padding:.35rem 1rem;font-size:.7rem;font-family:var(--font-m);color:var(--accent);letter-spacing:1px;margin-bottom:1.5rem}
+.hero-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulse 1.5s infinite}
+h1{font-family:var(--font-d);font-size:clamp(3rem,10vw,7rem);letter-spacing:3px;line-height:.92;margin-bottom:1.25rem}
+.gold{color:var(--accent)}
+.dim{color:var(--muted)}
+.hero-sub{font-size:clamp(.95rem,2vw,1.2rem);color:var(--muted);max-width:560px;line-height:1.75;margin:0 auto 2.5rem}
+.hero-sub strong{color:var(--text)}
+.hero-actions{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-bottom:1rem}
+.btn-gold{background:var(--accent);color:#111;padding:.85rem 2.25rem;border-radius:8px;font-family:var(--font-d);font-size:1.1rem;letter-spacing:2px;text-decoration:none;border:none;cursor:pointer;display:inline-block;transition:all .2s}
+.btn-gold:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(240,192,64,.3)}
+.btn-outline{background:transparent;color:var(--text);padding:.85rem 2.25rem;border-radius:8px;font-family:var(--font-d);font-size:1.1rem;letter-spacing:2px;text-decoration:none;border:1.5px solid var(--border);display:inline-block;transition:all .2s}
+.btn-outline:hover{border-color:var(--accent);color:var(--accent)}
+.hero-note{font-size:.75rem;color:var(--muted)}
+.hero-note strong{color:var(--ok)}
+
+#mockup{padding:3rem 2rem 4rem;max-width:1000px;margin:0 auto}
+.mockup-wrap{background:var(--surface);border:1.5px solid var(--border);border-radius:14px;overflow:hidden;box-shadow:0 40px 80px rgba(0,0,0,.6)}
+.mockup-bar{background:var(--surface2);border-bottom:2px solid var(--accent);padding:.65rem 1rem;display:flex;align-items:center;gap:.4rem}
+.m-dot{width:9px;height:9px;border-radius:50%}
+.m-url{background:var(--surface);border-radius:5px;padding:.25rem .85rem;font-family:var(--font-m);font-size:.65rem;color:var(--muted);flex:1;text-align:center;margin:0 .65rem}
+.m-tabs{display:flex;gap:.2rem}
+.m-tab{font-family:var(--font-d);font-size:.65rem;letter-spacing:1px;padding:.2rem .65rem;border-radius:4px;color:var(--muted);background:transparent}
+.m-tab.on{background:var(--accent);color:#111}
+.mockup-grid{padding:1.25rem;display:grid;grid-template-columns:repeat(3,1fr);gap:.65rem}
+.mc{background:var(--surface2);border:1.5px solid var(--border);border-radius:9px;padding:.85rem;position:relative;overflow:hidden}
+.mc::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px}
+.mc.g::before{background:var(--ok)}.mc.a::before{background:var(--accent)}.mc.b::before{background:#5b9cf6}
+.mc-veh{font-family:var(--font-d);font-size:.85rem;letter-spacing:1px;margin-bottom:.15rem}
+.mc-name{font-size:.65rem;color:var(--muted);margin-bottom:.5rem}
+.mc-tech{font-size:.6rem;color:var(--muted)}
+.mc-pipe{display:flex;gap:1px;margin-top:.5rem}
+.mp{flex:1;height:2px;border-radius:1px;background:var(--border)}
+.mp.d{background:var(--ok)}.mp.a{background:var(--accent)}
+.mc-badge{font-family:var(--font-m);font-size:.5rem;padding:.1rem .35rem;border-radius:3px;border:1px solid}
+.mc-badge.ok{color:var(--ok);border-color:var(--ok)}
+.mc-badge.w{color:var(--warn);border-color:var(--warn)}
+.mc-badge.p{color:var(--accent);border-color:var(--accent)}
+.mockup-caption{text-align:center;padding:.6rem;font-size:.68rem;color:var(--muted);font-family:var(--font-m);border-top:1px solid var(--border)}
+@media(max-width:640px){.mockup-grid{grid-template-columns:1fr}}
+
+#stats{padding:2.5rem 2rem;background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.stats-row{max-width:860px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;text-align:center}
+.sn{font-family:var(--font-d);font-size:2.75rem;color:var(--accent);line-height:1}
+.sl{font-size:.7rem;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-top:.3rem}
+@media(max-width:640px){.stats-row{grid-template-columns:repeat(2,1fr)}}
+
+section.content{padding:5rem 2rem;max-width:1100px;margin:0 auto}
+section.content.dark{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);max-width:100%;padding:5rem 2rem}
+section.content.dark .inner{max-width:1000px;margin:0 auto}
+.eyebrow{font-family:var(--font-m);font-size:.68rem;letter-spacing:3px;color:var(--accent);text-transform:uppercase;margin-bottom:.65rem}
+h2{font-family:var(--font-d);font-size:clamp(1.8rem,4.5vw,3.2rem);letter-spacing:2px;line-height:1.05;margin-bottom:.85rem}
+.sec-sub{font-size:.95rem;color:var(--muted);max-width:500px;line-height:1.75;margin-bottom:3rem}
+
+.feat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:1rem}
+.fc{background:var(--surface);border:1.5px solid var(--border);border-radius:12px;padding:1.5rem;transition:border-color .2s,transform .2s}
+.fc:hover{border-color:var(--accent);transform:translateY(-2px)}
+.fc-icon{font-size:1.6rem;margin-bottom:.75rem}
+.fc-title{font-family:var(--font-d);font-size:1.05rem;letter-spacing:1.5px;margin-bottom:.4rem}
+.fc-desc{font-size:.82rem;color:var(--muted);line-height:1.6}
+.fc-tag{display:inline-block;margin-top:.65rem;font-family:var(--font-m);font-size:.58rem;padding:.12rem .45rem;border-radius:3px;background:rgba(240,192,64,.12);color:var(--accent);border:1px solid rgba(240,192,64,.3)}
+
+.steps-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;margin-top:2.5rem}
+.step{text-align:center}
+.step-n{width:52px;height:52px;border-radius:50%;background:var(--surface2);border:2px solid var(--accent);display:flex;align-items:center;justify-content:center;font-family:var(--font-d);font-size:1.3rem;color:var(--accent);margin:0 auto .85rem}
+.step-t{font-family:var(--font-d);font-size:1rem;letter-spacing:1.5px;margin-bottom:.35rem}
+.step-d{font-size:.78rem;color:var(--muted);line-height:1.6}
+@media(max-width:640px){.steps-row{grid-template-columns:1fr 1fr}.feat-grid{grid-template-columns:1fr}}
+
+.vs-wrap{background:var(--surface);border:1.5px solid var(--border);border-radius:12px;overflow:hidden;margin-top:2rem}
+.vs-head{display:grid;grid-template-columns:1fr 1fr 1fr;background:var(--surface2);border-bottom:1.5px solid var(--border)}
+.vh{padding:.85rem 1rem;font-family:var(--font-d);font-size:.88rem;letter-spacing:1.5px;text-align:center}
+.vh.us{color:var(--accent);border-left:2px solid var(--accent)}
+.vh.them{color:var(--muted)}
+.vs-row{display:grid;grid-template-columns:1fr 1fr 1fr;border-bottom:1px solid var(--border);align-items:center}
+.vs-row:last-child{border-bottom:none}
+.vs-row:hover{background:var(--surface2)}
+.vf{padding:.75rem 1rem;font-size:.82rem;color:var(--muted)}
+.vc{padding:.75rem 1rem;text-align:center;font-size:.9rem}
+.vc.us{border-left:2px solid rgba(240,192,64,.15)}
+.ck{color:var(--ok)}.cx{color:var(--danger)}
+.vs-price{font-family:var(--font-d);font-size:1.4rem}
+.vs-price.us{color:var(--accent)}.vs-price.them{color:var(--muted)}
+.vs-price-row{background:var(--surface2)}
+
+.price-wrap{max-width:480px;margin:2rem auto 0}
+.price-card{background:var(--bg);border:2px solid var(--accent);border-radius:16px;padding:2.5rem;position:relative;text-align:center}
+.price-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--ok));border-radius:16px 16px 0 0}
+.price-pill{position:absolute;top:1.25rem;right:1.25rem;background:var(--ok);color:#111;font-family:var(--font-d);font-size:.7rem;letter-spacing:1.5px;padding:.2rem .7rem;border-radius:99px}
+.price-name{font-family:var(--font-d);font-size:1rem;letter-spacing:3px;color:var(--muted);margin-bottom:.4rem}
+.price-num{font-family:var(--font-d);font-size:5rem;color:var(--accent);line-height:1}
+.price-per{font-size:.82rem;color:var(--muted);margin-bottom:.4rem}
+.price-free{font-size:.85rem;color:var(--ok);font-weight:600;margin-bottom:1.75rem}
+.price-list{list-style:none;text-align:left;margin-bottom:2rem;display:flex;flex-direction:column;gap:.6rem}
+.price-list li{display:flex;align-items:center;gap:.65rem;font-size:.85rem}
+.price-list li::before{content:'✓';color:var(--ok);font-weight:700;flex-shrink:0}
+.price-btn{display:block;background:var(--accent);color:#111;padding:.9rem;border-radius:9px;font-family:var(--font-d);font-size:1.1rem;letter-spacing:2px;text-decoration:none;transition:all .2s}
+.price-btn:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(240,192,64,.3)}
+.price-fine{margin-top:.85rem;font-size:.72rem;color:var(--muted)}
+
+#about-sec{padding:5rem 2rem;max-width:700px;margin:0 auto;text-align:center}
+.about-text{font-size:.95rem;color:var(--muted);line-height:1.9;margin:1.25rem auto 0;max-width:580px}
+.about-text strong{color:var(--text)}
+.about-sig{margin-top:1.75rem;font-family:var(--font-m);font-size:.72rem;color:var(--muted);letter-spacing:1px}
+
+#cta-sec{padding:6rem 2rem;text-align:center;position:relative;overflow:hidden}
+#cta-sec::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(240,192,64,.08) 0%,transparent 70%);pointer-events:none}
+.cta-h{font-family:var(--font-d);font-size:clamp(2.5rem,6vw,5rem);letter-spacing:3px;line-height:1;margin-bottom:1rem}
+.cta-h span{color:var(--accent)}
+.cta-sub{font-size:.95rem;color:var(--muted);margin-bottom:2.25rem}
+
+footer{background:var(--surface);border-top:1px solid var(--border);padding:2rem;text-align:center}
+.foot-logo{font-family:var(--font-d);font-size:1.2rem;letter-spacing:2px;margin-bottom:.4rem}
+.foot-logo span{color:var(--accent)}
+.foot-sub{font-size:.65rem;color:var(--muted);letter-spacing:2px;margin-bottom:.85rem}
+.foot-links{display:flex;gap:1.5rem;justify-content:center;margin-bottom:.85rem;flex-wrap:wrap}
+.foot-links a{font-size:.75rem;color:var(--muted);text-decoration:none;transition:color .2s}
+.foot-links a:hover{color:var(--accent)}
+.foot-copy{font-size:.68rem;color:var(--border)}
+
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="nav-logo">
+    <svg width="20" height="24" viewBox="0 0 56 64" fill="none">
+      <path d="M6 4 L38 4 L50 16 L50 60 L6 60 Z" fill="rgba(240,192,64,.12)" stroke="#f0c040" stroke-width="3" stroke-linejoin="round"/>
+      <path d="M38 4 L38 16 L50 16" fill="rgba(240,192,64,.25)" stroke="#f0c040" stroke-width="3" stroke-linejoin="round"/>
+      <path d="M17 36 L25 45 L40 26" stroke="#f0c040" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <div>
+      <div class="nav-logo-text"><span>Inspect</span>Pro</div>
+      <div class="nav-sub">Professional Vehicle Inspection</div>
+    </div>
+  </a>
+  <div class="nav-links">
+    <a href="#features">Features</a>
+    <a href="#how">How It Works</a>
+    <a href="#vs">Compare</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#about-sec">About</a>
+    <a href="#pricing" class="nav-cta">START FREE TRIAL</a>
+  </div>
+</nav>
+
+<section id="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-badge"><div class="hero-dot"></div> NOW AVAILABLE &nbsp;·&nbsp; 30-DAY FREE TRIAL</div>
+  <h1>STOP DOING<br><span class="gold">PAPER</span><br><span class="dim">INSPECTIONS.</span></h1>
+  <p class="hero-sub">Give your techs the tools to work faster. Give your customers the transparency to trust you. <strong>Give your shop the edge to stand out.</strong></p>
+  <div class="hero-actions">
+    <a href="#pricing" class="btn-gold">START FREE — 30 DAYS</a>
+    <a href="#features" class="btn-outline">SEE HOW IT WORKS</a>
+  </div>
+  <p class="hero-note"><strong>No credit card required.</strong> Cancel anytime. $99/month after trial.</p>
+</section>
+
+<section id="mockup">
+  <div class="mockup-wrap">
+    <div class="mockup-bar">
+      <div class="m-dot" style="background:#ff5f57"></div>
+      <div class="m-dot" style="background:#febc2e"></div>
+      <div class="m-dot" style="background:#28c840"></div>
+      <div class="m-url">app.inspectpro.io · Office Dashboard</div>
+      <div class="m-tabs">
+        <div class="m-tab on">OFFICE</div>
+        <div class="m-tab">TECH VIEW</div>
+        <div class="m-tab">⚙</div>
+      </div>
+    </div>
+    <div class="mockup-grid">
+      <div class="mc g">
+        <div class="mc-veh">2023 FORD F-150</div>
+        <div class="mc-name">James Carter &nbsp;<span class="mc-badge ok">BASIC</span></div>
+        <div class="mc-tech">🔧 ALEX R. &nbsp;·&nbsp; OIL CHANGE</div>
+        <div class="mc-pipe"><div class="mp d"></div><div class="mp d"></div><div class="mp a"></div><div class="mp"></div><div class="mp"></div></div>
+      </div>
+      <div class="mc a">
+        <div class="mc-veh">2019 CHEVY TAHOE</div>
+        <div class="mc-name">Sarah Mills &nbsp;<span class="mc-badge w">INSPECTION</span></div>
+        <div class="mc-tech">🔧 JASON M. &nbsp;·&nbsp; STATE INSPECTION</div>
+        <div class="mc-pipe"><div class="mp d"></div><div class="mp d"></div><div class="mp d"></div><div class="mp a"></div><div class="mp"></div></div>
+      </div>
+      <div class="mc b">
+        <div class="mc-veh">2021 TOYOTA CAMRY</div>
+        <div class="mc-name">David Reyes &nbsp;<span class="mc-badge p">PPI</span></div>
+        <div class="mc-tech">🔧 CHRIS T. &nbsp;·&nbsp; PRE-PURCHASE</div>
+        <div class="mc-pipe"><div class="mp d"></div><div class="mp a"></div><div class="mp"></div><div class="mp"></div><div class="mp"></div></div>
+      </div>
+    </div>
+    <div class="mockup-caption">✓ Works on any phone, tablet, or desktop &nbsp;·&nbsp; no app download needed &nbsp;·&nbsp; live job tracking</div>
+  </div>
+</section>
+
+<section id="stats">
+  <div class="stats-row">
+    <div><div class="sn">3</div><div class="sl">Built-in inspection tiers</div></div>
+    <div><div class="sn">30s</div><div class="sl">To check in a vehicle</div></div>
+    <div><div class="sn">$99</div><div class="sl">Per month flat</div></div>
+    <div><div class="sn">0</div><div class="sl">Paper forms needed</div></div>
+  </div>
+</section>
+
+<section class="content" id="features">
+  <div class="eyebrow">Everything your shop needs</div>
+  <h2>Built by techs.<br>For shops that take pride.</h2>
+  <p class="sec-sub">We've been in the shop. We know what techs actually need and what owners actually care about. Every feature was built around real shop life — not a boardroom.</p>
+  <div class="feat-grid">
+    <div class="fc"><div class="fc-icon">📋</div><div class="fc-title">DIGITAL INSPECTIONS</div><div class="fc-desc">Professional DVIs your techs fill out from any phone or tablet. Three built-in tiers — Basic, Inspection, and PPI. No paper, no clipboards, no lost forms.</div></div>
+    <div class="fc"><div class="fc-icon">🛠</div><div class="fc-title">FULLY CUSTOMIZABLE</div><div class="fc-desc">Add, remove, and reorder inspection items. Build unlimited custom tiers. Set required fields. Your shop, your checklist.</div><div class="fc-tag">OWNER CONTROLLED</div></div>
+    <div class="fc"><div class="fc-icon">✨</div><div class="fc-title">AI SMART NOTES</div><div class="fc-desc">Tech writes "pads low metal" — AI rewrites it into professional language customers understand. Always tech-reviewed before saving.</div><div class="fc-tag">POWERED BY AI</div></div>
+    <div class="fc"><div class="fc-icon">📷</div><div class="fc-title">WALK-AROUND PHOTOS</div><div class="fc-desc">Required photo slots for every corner, dash, and oil sticker. Per-item photos too. Everything saved and viewable in customer history forever.</div></div>
+    <div class="fc"><div class="fc-icon">🖨</div><div class="fc-title">PROFESSIONAL REPORTS</div><div class="fc-desc">Clean, branded inspection reports with your shop logo. Color-coded results — pass, advisory, fail. Ready to print in seconds.</div></div>
+    <div class="fc"><div class="fc-icon">👥</div><div class="fc-title">MULTI-TECH DASHBOARD</div><div class="fc-desc">See every vehicle, every tech, every job status at a glance. Office gets notified the moment an inspection is complete.</div></div>
+    <div class="fc"><div class="fc-icon">🔍</div><div class="fc-title">CUSTOMER HISTORY</div><div class="fc-desc">Search any customer, plate, or VIN instantly. Every past visit — what was found, mileage, tech, all photos. Returning customer? Pre-fill their info in one tap.</div></div>
+    <div class="fc"><div class="fc-icon">💬</div><div class="fc-title">SMART NOTE PRESETS</div><div class="fc-desc">Owners write preset notes per item. Tech picks one with a tap. Consistent, professional notes across every inspection.</div><div class="fc-tag">OWNER CONTROLLED</div></div>
+    <div class="fc"><div class="fc-icon">📱</div><div class="fc-title">ANY DEVICE. NO APP.</div><div class="fc-desc">Works on any phone, tablet, or computer right in the browser. No app store. No downloads. No IT. Open it and go.</div></div>
+  </div>
+</section>
+
+<section class="content dark" id="how">
+  <div class="inner">
+    <div class="eyebrow">Simple by design</div>
+    <h2>From check-in to report<br>in minutes.</h2>
+    <div class="steps-row">
+      <div class="step"><div class="step-n">1</div><div class="step-t">CHECK IN</div><div class="step-d">Office creates the job in 30 seconds. VIN decode auto-fills the vehicle. Assign a tech and pick the tier.</div></div>
+      <div class="step"><div class="step-n">2</div><div class="step-t">INSPECT</div><div class="step-d">Tech opens the job on their phone. Walk-around photos, checklist, notes, brake measurements — one clean screen.</div></div>
+      <div class="step"><div class="step-n">3</div><div class="step-t">REVIEW</div><div class="step-d">Tech taps Report. Color-coded results — pass, advisory, fail — with photos and notes ready to review.</div></div>
+      <div class="step"><div class="step-n">4</div><div class="step-t">DONE</div><div class="step-d">Mark it done. Office gets notified. Customer history updated automatically. Every photo saved forever.</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="content" id="vs">
+  <div class="eyebrow" style="text-align:center">The honest comparison</div>
+  <h2 style="text-align:center">Half the price.<br>Everything you need.</h2>
+  <div class="vs-wrap">
+    <div class="vs-head">
+      <div class="vh">FEATURE</div>
+      <div class="vh us">INSPECTPRO</div>
+      <div class="vh them">COMPETITOR</div>
+    </div>
+    <div class="vs-row"><div class="vf">Digital Vehicle Inspections</div><div class="vc us"><span class="ck">✓</span></div><div class="vc"><span class="ck">✓</span></div></div>
+    <div class="vs-row"><div class="vf">Walk-around photos & video</div><div class="vc us"><span class="ck">✓</span></div><div class="vc"><span class="ck">✓</span></div></div>
+    <div class="vs-row"><div class="vf">Custom inspection checklists</div><div class="vc us"><span class="ck">✓</span></div><div class="vc"><span class="ck">✓</span></div></div>
+    <div class="vs-row"><div class="vf">Unlimited custom tiers</div><div class="vc us"><span class="ck">✓</span></div><div class="vc"><span class="ck">✓</span></div></div>
+    <div class="vs-row"><div class="vf">AI Smart Notes</div><div class="vc us"><span class="ck">✓</span></div><div class="vc"><span class="ck">✓</span></div></div>
+    <div class="vs-row"><div class="vf">Customer history & search</div><div class="vc us"><span class="ck">✓</span></div><div class="vc"><span class="ck">✓</span></div></div>
+    <div class="vs-row"><div class="vf">Professional branded reports</div><div class="vc us"><span class="ck">✓</span></div><div class="vc"><span class="ck">✓</span></div></div>
+    <div class="vs-row"><div class="vf">Multi-tech dashboard</div><div class="vc us"><span class="ck">✓</span></div><div class="vc"><span class="ck">✓</span></div></div>
+    <div class="vs-row"><div class="vf">Setup wizard (ready in 3 min)</div><div class="vc us"><span class="ck">✓</span></div><div class="vc"><span class="cx">✗</span></div></div>
+    <div class="vs-row"><div class="vf">Works on any device, no app</div><div class="vc us"><span class="ck">✓</span></div><div class="vc"><span class="ck">✓</span></div></div>
+    <div class="vs-row"><div class="vf">No contract, cancel anytime</div><div class="vc us"><span class="ck">✓</span></div><div class="vc"><span class="ck">✓</span></div></div>
+    <div class="vs-row vs-price-row">
+      <div class="vf" style="font-weight:600;color:var(--text)">Monthly Price</div>
+      <div class="vc us"><div class="vs-price us">$99</div><div style="font-size:.62rem;color:var(--muted)">flat rate</div></div>
+      <div class="vc"><div class="vs-price them">$200–$380</div><div style="font-size:.62rem;color:var(--muted)">+ add-ons</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="content dark" id="pricing">
+  <div class="inner" style="text-align:center">
+    <div class="eyebrow">Simple pricing</div>
+    <h2>One price.<br>Everything included.</h2>
+    <p class="sec-sub" style="margin:0 auto 0;text-align:center">No tiers, no hidden fees, no add-ons. Just $99/month and your whole shop is covered.</p>
+    <div class="price-wrap">
+      <div class="price-card">
+        <div class="price-pill">30-DAY FREE TRIAL</div>
+        <div class="price-name">INSPECTPRO</div>
+        <div class="price-num">$99</div>
+        <div class="price-per">per month</div>
+        <div class="price-free">✓ First 30 days completely free — no credit card required</div>
+        <ul class="price-list">
+          <li>Unlimited inspections</li>
+          <li>Unlimited technicians</li>
+          <li>All 3 built-in inspection tiers</li>
+          <li>Custom checklists & unlimited tiers</li>
+          <li>AI Smart Notes</li>
+          <li>Walk-around photos & video</li>
+          <li>Customer history & search</li>
+          <li>Professional branded reports</li>
+          <li>Multi-tech office dashboard</li>
+          <li>Works on any device, no app needed</li>
+          <li>Cancel anytime, no contracts</li>
+        </ul>
+        <a href="#" class="price-btn">START FREE TRIAL →</a>
+        <div class="price-fine">No credit card needed · $99/mo after 30 days · Cancel anytime</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="about-sec">
+  <div class="eyebrow">Our story</div>
+  <h2>Built in the shop.<br>Not a boardroom.</h2>
+  <p class="about-text">
+    We've been automotive technicians. We know what it's like to do inspections on paper, lose forms, and watch customers not understand why their car needs work.
+    <br><br>
+    <strong>We built InspectPro because we needed it ourselves.</strong> Every feature came from real shop experience — not a focus group. The inspection tiers, the walk-around photos, the customer history — all built around how shops actually work.
+    <br><br>
+    We're not a big software company. We're shop guys who know how to build software. And we built something we're proud of.
+  </p>
+  <div class="about-sig">— The InspectPro Team &nbsp;·&nbsp; Built by techs, for techs 🔧</div>
+</section>
+
+<section id="cta-sec">
+  <h2 class="cta-h">READY TO<br><span>LEVEL UP</span><br>YOUR SHOP?</h2>
+  <p class="cta-sub">30 days free. No credit card. Cancel anytime. It's that simple.</p>
+  <a href="#pricing" class="btn-gold">START FREE TRIAL →</a>
+</section>
+
+<footer>
+  <div class="foot-logo"><span>Inspect</span>Pro</div>
+  <div class="foot-sub">Professional Vehicle Inspection Platform</div>
+  <div class="foot-links">
+    <a href="#features">Features</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#about-sec">About</a>
+    <a href="/cdn-cgi/l/email-protection#f199949d9d9eb1989f828194928581839edf989e">Contact</a>
+  </div>
+  <div class="foot-copy">© 2025 InspectPro. All rights reserved. Built by techs, for techs.</div>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+  a.addEventListener('click',e=>{
+    const t=document.querySelector(a.getAttribute('href'));
+    if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth',block:'start'});}
+  });
+});
+window.addEventListener('scroll',()=>
