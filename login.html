@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>InspectPro — Login</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0a0b0d;color:#f2f2f2;font-family:'DM Sans',sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1rem}
+.logo{display:flex;flex-direction:column;align-items:center;margin-bottom:2rem}
+.logo-text{font-family:'Bebas Neue',sans-serif;font-size:2.5rem;letter-spacing:4px}
+.logo-text span{color:#f0c040}
+.logo-sub{font-size:.6rem;color:#6b6e77;letter-spacing:3px;text-transform:uppercase;margin-top:.25rem}
+.card{background:#111214;border:1.5px solid #2a2b2f;border-radius:16px;padding:2rem;width:100%;max-width:420px}
+.card-title{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:2px;color:#f0c040;margin-bottom:.25rem;text-align:center}
+.card-sub{font-size:.8rem;color:#6b6e77;text-align:center;margin-bottom:1.75rem}
+.field{margin-bottom:1rem}
+.field label{display:block;font-size:.68rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:#6b6e77;margin-bottom:.35rem}
+.field input{width:100%;background:#1c1d20;border:1.5px solid #2a2b2f;border-radius:8px;color:#f2f2f2;font-family:'DM Sans',sans-serif;font-size:.95rem;padding:.65rem .9rem;outline:none;transition:border-color .2s}
+.field input:focus{border-color:#f0c040}
+.btn{width:100%;padding:.8rem;background:#f0c040;color:#111;border:none;border-radius:9px;font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:2px;cursor:pointer;transition:opacity .2s;margin-top:.5rem}
+.btn:hover{opacity:.85}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn-outline{width:100%;padding:.8rem;background:transparent;color:#f2f2f2;border:1.5px solid #2a2b2f;border-radius:9px;font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:2px;cursor:pointer;transition:all .2s;margin-top:.5rem}
+.btn-outline:hover{border-color:#f0c040;color:#f0c040}
+.divider{display:flex;align-items:center;gap:.75rem;margin:1.25rem 0}
+.divider-line{flex:1;height:1px;background:#2a2b2f}
+.divider-text{font-size:.72rem;color:#6b6e77}
+.toggle{text-align:center;margin-top:1.25rem;font-size:.82rem;color:#6b6e77}
+.toggle a{color:#f0c040;cursor:pointer;text-decoration:none}
+.toggle a:hover{text-decoration:underline}
+.error{background:#ff4d4d20;border:1px solid #ff4d4d;border-radius:8px;padding:.65rem .9rem;font-size:.82rem;color:#ff4d4d;margin-bottom:1rem;display:none}
+.success{background:#3ddc8420;border:1px solid #3ddc84;border-radius:8px;padding:.65rem .9rem;font-size:.82rem;color:#3ddc84;margin-bottom:1rem;display:none}
+.forgot{text-align:right;margin-top:.25rem}
+.forgot a{font-size:.75rem;color:#6b6e77;cursor:pointer;text-decoration:none}
+.forgot a:hover{color:#f0c040}
+.back-link{text-align:center;margin-top:1.5rem;font-size:.78rem;color:#6b6e77}
+.back-link a{color:#6b6e77;text-decoration:none}
+.back-link a:hover{color:#f0c040}
+</style>
+</head>
+<body>
+
+<div class="logo">
+  <div class="logo-text"><span>Inspect</span>Pro</div>
+  <div class="logo-sub">Professional Vehicle Inspection</div>
+</div>
+
+<div class="card">
+  <!-- LOGIN FORM -->
+  <div id="loginForm">
+    <div class="card-title">WELCOME BACK</div>
+    <div class="card-sub">Sign in to your shop account</div>
+    <div class="error" id="loginError"></div>
+    <div class="success" id="loginSuccess"></div>
+    <div class="field">
+      <label>Email</label>
+      <input type="email" id="loginEmail" placeholder="shop@email.com" onkeydown="if(event.key==='Enter')login()">
+    </div>
+    <div class="field">
+      <label>Password</label>
+      <input type="password" id="loginPassword" placeholder="••••••••" onkeydown="if(event.key==='Enter')login()">
+      <div class="forgot"><a onclick="showForgot()">Forgot password?</a></div>
+    </div>
+    <button class="btn" id="loginBtn" onclick="login()">SIGN IN →</button>
+    <div class="divider"><div class="divider-line"></div><div class="divider-text">OR</div><div class="divider-line"></div></div>
+    <button class="btn-outline" onclick="showSignup()">CREATE ACCOUNT</button>
+    <div class="toggle">New to InspectPro? <a onclick="showSignup()">Start your 30-day free trial</a></div>
+  </div>
+
+  <!-- SIGNUP FORM -->
+  <div id="signupForm" style="display:none">
+    <div class="card-title">CREATE ACCOUNT</div>
+    <div class="card-sub">Start your 30-day free trial today</div>
+    <div class="error" id="signupError"></div>
+    <div class="success" id="signupSuccess"></div>
+    <div class="field">
+      <label>Shop Name</label>
+      <input type="text" id="signupShop" placeholder="Mike's Auto Service">
+    </div>
+    <div class="field">
+      <label>Your Name</label>
+      <input type="text" id="signupName" placeholder="Mike Johnson">
+    </div>
+    <div class="field">
+      <label>Email</label>
+      <input type="email" id="signupEmail" placeholder="shop@email.com">
+    </div>
+    <div class="field">
+      <label>Password</label>
+      <input type="password" id="signupPassword" placeholder="Min 8 characters" onkeydown="if(event.key==='Enter')signup()">
+    </div>
+    <button class="btn" id="signupBtn" onclick="signup()">START FREE TRIAL →</button>
+    <div class="toggle">Already have an account? <a onclick="showLogin()">Sign in</a></div>
+  </div>
+
+  <!-- FORGOT PASSWORD -->
+  <div id="forgotForm" style="display:none">
+    <div class="card-title">RESET PASSWORD</div>
+    <div class="card-sub">Enter your email and we'll send a reset link</div>
+    <div class="error" id="forgotError"></div>
+    <div class="success" id="forgotSuccess"></div>
+    <div class="field">
+      <label>Email</label>
+      <input type="email" id="forgotEmail" placeholder="shop@email.com" onkeydown="if(event.key==='Enter')resetPassword()">
+    </div>
+    <button class="btn" onclick="resetPassword()">SEND RESET LINK →</button>
+    <button class="btn-outline" onclick="showLogin()">BACK TO LOGIN</button>
+  </div>
+</div>
+
+<div class="back-link"><a href="index.html">← Back to myinspectpro.com</a></div>
+
+<script>
+const SUPABASE_URL='https://rmmkkgnwpucytlhgxft.supabase.co';
+const SUPABASE_KEY='sb_publishable_ee8AqF84_DRNlBW0D8KbRg_-jdHCAEp';
+
+function showLogin(){
+  document.getElementById('loginForm').style.display='block';
+  document.getElementById('signupForm').style.display='none';
+  document.getElementById('forgotForm').style.display='none';
+}
+function showSignup(){
+  document.getElementById('loginForm').style.display='none';
+  document.getElementById('signupForm').style.display='block';
+  document.getElementById('forgotForm').style.display='none';
+}
+function showForgot(){
+  document.getElementById('loginForm').style.display='none';
+  document.getElementById('signupForm').style.display='none';
+  document.getElementById('forgotForm').style.display='block';
+}
+
+function showError(id,msg){
+  const el=document.getElementById(id);
+  el.textContent=msg;el.style.display='block';
+  document.getElementById(id.replace('Error','Success')).style.display='none';
+}
+function showSuccess(id,msg){
+  const el=document.getElementById(id);
+  el.textContent=msg;el.style.display='block';
+  document.getElementById(id.replace('Success','Error')).style.display='none';
+}
+
+async function login(){
+  const email=document.getElementById('loginEmail').value.trim();
+  const password=document.getElementById('loginPassword').value;
+  if(!email||!password){showError('loginError','Please enter your email and password.');return;}
+  const btn=document.getElementById('loginBtn');
+  btn.disabled=true;btn.textContent='SIGNING IN...';
+  try{
+    const res=await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`,{
+      method:'POST',
+      headers:{'Content-Type':'application/json','apikey':SUPABASE_KEY},
+      body:JSON.stringify({email,password})
+    });
+    const data=await res.json();
+    if(data.error||data.error_description){
+      showError('loginError',data.error_description||data.error||'Login failed. Check your email and password.');
+      btn.disabled=false;btn.textContent='SIGN IN →';return;
+    }
+    // save session
+    localStorage.setItem('ip_session',JSON.stringify(data));
+    localStorage.setItem('ip_user',JSON.stringify(data.user));
+    // redirect to app
+    window.location.href='vehicle-inspection.html';
+  }catch(e){
+    showError('loginError','Connection error. Please try again.');
+    btn.disabled=false;btn.textContent='SIGN IN →';
+  }
+}
+
+async function signup(){
+  const shop=document.getElementById('signupShop').value.trim();
+  const name=document.getElementById('signupName').value.trim();
+  const email=document.getElementById('signupEmail').value.trim();
+  const password=document.getElementById('signupPassword').value;
+  if(!shop){showError('signupError','Please enter your shop name.');return;}
+  if(!name){showError('signupError','Please enter your name.');return;}
+  if(!email){showError('signupError','Please enter your email.');return;}
+  if(password.length<8){showError('signupError','Password must be at least 8 characters.');return;}
+  const btn=document.getElementById('signupBtn');
+  btn.disabled=true;btn.textContent='CREATING ACCOUNT...';
+  try{
+    const res=await fetch(`${SUPABASE_URL}/auth/v1/signup`,{
+      method:'POST',
+      headers:{'Content-Type':'application/json','apikey':SUPABASE_KEY},
+      body:JSON.stringify({email,password,data:{shop_name:shop,full_name:name}})
+    });
+    const data=await res.json();
+    if(data.error||data.error_description){
+      showError('signupError',data.error_description||data.error||'Signup failed. Please try again.');
+      btn.disabled=false;btn.textContent='START FREE TRIAL →';return;
+    }
+    showSuccess('signupSuccess','Account created! Check your email to confirm then sign in.');
+    btn.disabled=false;btn.textContent='START FREE TRIAL →';
+  }catch(e){
+    showError('signupError','Connection error. Please try again.');
+    btn.disabled=false;btn.textContent='START FREE TRIAL →';
+  }
+}
+
+async function resetPassword(){
+  const email=document.getElementById('forgotEmail').value.trim();
+  if(!email){showError('forgotError','Please enter your email.');return;}
+  try{
+    const res=await fetch(`${SUPABASE_URL}/auth/v1/recover`,{
+      method:'POST',
+      headers:{'Content-Type':'application/json','apikey':SUPABASE_KEY},
+      body:JSON.stringify({email})
+    });
+    showSuccess('forgotSuccess','Reset link sent! Check your email.');
+  }catch(e){
+    showError('forgotError','Connection error. Please try again.');
+  }
+}
+
+// check if already logged in
+const session=localStorage.getItem('ip_session');
+if(session){
+  try{
+    const s=JSON.parse(session);
+    if(s.access_token)window.location.href='vehicle-inspection.html';
+  }catch(e){}
+}
+</script>
+</body>
+</html>
